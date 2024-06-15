@@ -1,0 +1,21 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/.vs/ITS.Solution/DesignTimeBuild
+/.vs/ITS.Solution/FileContentIndex
+/.vs/ITS.Solution/v17
+/.vs/ProjectEvaluation
+/ITS.Api/bin/Debug/net8.0
+/.vs/ITS.Solution/config
+/ITS.Api/obj/Debug/net8.0
+/ITS.Api/obj
+/ITS.Application/bin/Debug/net8.0
+/ITS.Application/obj
+/ITS.Domain/bin/Debug/net8.0
+/ITS.Domain/obj/Debug/net8.0
+/ITS.Domain/obj
+/ITS.Infrastructure/bin/Debug/net8.0
+/ITS.Infrastructure/obj
+/ITS.Test/bin/Debug/net8.0
+/ITS.Test/obj
