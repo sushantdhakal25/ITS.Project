@@ -1,4 +1,6 @@
-﻿using ITS.Application.Interfaces;
+﻿using AutoMapper;
+using ITS.Application.DTOs;
+using ITS.Application.Interfaces;
 using ITS.Domain.Entities;
 using ITS.Domain.Repositories;
 
@@ -7,10 +9,12 @@ namespace ITS.Application.Services
     public class OfficerService : IOfficerService
     {
         private readonly IOfficerRepository _officerRepository;
+        private readonly IMapper _mapper;
 
-        public OfficerService(IOfficerRepository officerRepository)
+        public OfficerService(IOfficerRepository officerRepository, IMapper mapper)
         {
             _officerRepository = officerRepository;
+            _mapper = mapper;
         }
 
         public async Task<string> GetOfficersAsync(string? searchText)
@@ -18,9 +22,10 @@ namespace ITS.Application.Services
             return await _officerRepository.GetAsync(searchText);
         }
 
-        public async Task<Officer> GetOfficerLoginAsync(string identificationNumber, string password)
+        public async Task<OfficerDto> GetOfficerLoginAsync(string identificationNumber, string password)
         {
-            return await _officerRepository.GetOfficerLoginAsync(identificationNumber, password);
+            var result = await _officerRepository.GetOfficerLoginAsync(identificationNumber, password);
+            return _mapper.Map<OfficerDto>(result);
         }
 
         public async Task<string> AddOfficerAsync(string param)

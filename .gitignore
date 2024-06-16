@@ -19,3 +19,4 @@
 /ITS.Infrastructure/obj
 /ITS.Test/bin/Debug/net8.0
 /ITS.Test/obj
+/ITS.Api/tempkey.jwk
