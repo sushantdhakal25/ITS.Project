@@ -3,15 +3,17 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.10.35004.147
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITS.Domain", "ITS.Domain\ITS.Domain.csproj", "{E1B899C3-10FD-46CF-842F-31ECF263C03B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Domain", "ITS.Domain\ITS.Domain.csproj", "{E1B899C3-10FD-46CF-842F-31ECF263C03B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITS.Application", "ITS.Application\ITS.Application.csproj", "{2F35DF5B-D916-45DA-B3E0-4861EAAAD912}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Application", "ITS.Application\ITS.Application.csproj", "{2F35DF5B-D916-45DA-B3E0-4861EAAAD912}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITS.Infrastructure", "ITS.Infrastructure\ITS.Infrastructure.csproj", "{66B5F7DB-1334-4774-AF86-60242D28B1DD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Infrastructure", "ITS.Infrastructure\ITS.Infrastructure.csproj", "{66B5F7DB-1334-4774-AF86-60242D28B1DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITS.Api", "ITS.Api\ITS.Api.csproj", "{820416A1-0AAD-4344-BA38-747F945757E9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Api", "ITS.Api\ITS.Api.csproj", "{820416A1-0AAD-4344-BA38-747F945757E9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ITS.Test", "ITS.Test\ITS.Test.csproj", "{747C5F87-B65C-4581-9D8F-E6AB508CB4CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Test", "ITS.Test\ITS.Test.csproj", "{747C5F87-B65C-4581-9D8F-E6AB508CB4CA}"
+EndProject
+Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ITS.Web", "ITS.Web\ITS.Web.esproj", "{CAB72C4F-F80C-405E-8F97-DE31273D4855}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,12 @@ Global
 		{747C5F87-B65C-4581-9D8F-E6AB508CB4CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{747C5F87-B65C-4581-9D8F-E6AB508CB4CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{747C5F87-B65C-4581-9D8F-E6AB508CB4CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB72C4F-F80C-405E-8F97-DE31273D4855}.Release|Any CPU.Deploy.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

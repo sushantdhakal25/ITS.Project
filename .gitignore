@@ -20,3 +20,5 @@
 /ITS.Test/bin/Debug/net8.0
 /ITS.Test/obj
 /ITS.Api/tempkey.jwk
+/ITS.Web/.vscode
+/ITS.Web/obj/Debug
