@@ -22,3 +22,5 @@
 /ITS.Api/tempkey.jwk
 /ITS.Web/.vscode
 /ITS.Web/obj/Debug
+/ITS.Web/.editorconfig
+/ITS.Web/package-lock.json
