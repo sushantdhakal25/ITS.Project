@@ -57,7 +57,7 @@ namespace ITS.Infrastructure.Helper
             var sqlParams = parameters.ToArray();
             Console.WriteLine($"CALL {storedProcedureName}({parameterPlaceholders})");
 
-            var result = await _context.Set<T>().FromSqlRaw($"CALL {storedProcedureName}({parameterPlaceholders})", sqlParams)?.ToListAsync();
+            var result = await _context.Set<T>().FromSqlRaw($"CALL {storedProcedureName}({parameterPlaceholders})", sqlParams).ToListAsync();
             return result;
         }
     }
