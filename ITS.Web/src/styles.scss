@@ -1,0 +1,72 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap');
+
+//common styles
+html,
+body {
+    height: 100%;
+}
+
+body {
+    margin: 0;
+    font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+::ng-deep .mat-toolbar {
+    padding: 0 !important;
+    margin: 0 !important;
+}
+
+mat-table {
+    min-height: 440px;
+
+    .mat-mdc-row:nth-child(even) {
+        background-color: #f4f4f4;
+    }
+
+    .mat-mdc-row:nth-child(odd) {
+        background-color: #ffffff;
+    }
+
+    mat-header-row,
+    mat-row {
+        min-height: 40px !important;
+    }
+}
+
+.selected-row {
+    background: red;
+}
+
+.actionbar {
+    background: white;
+    font-size: 14px;
+    min-height: 40px;
+    height: 60px;
+    padding-left: 20px;
+    padding-top: 10px;
+}
+
+.spacer {
+    flex: 1 1 auto;
+}
+
+.mat-icon {
+    font-size: 20px;
+}
+
+mat-toolbar {
+    display: flex;
+    justify-content: space-between;
+}
+
+// grid no data message
+.nodata {
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: none;
+  }

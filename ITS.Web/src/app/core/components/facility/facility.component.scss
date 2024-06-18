@@ -1,0 +1,22 @@
+/* Override the background color for filled text fields */
+::ng-deep .mdc-text-field.mdc-text-field--filled:not(.mdc-text-field--disabled) {
+    background-color: transparent !important;
+  }
+  
+  .selected-row {
+    background-color: #cbcaca !important;
+    color: #333;
+  }
+  
+  .addbutton {
+    position: fixed;
+    top: auto;
+    right: 20px;
+    left: auto;
+    bottom: 20px;
+  }
+  
+  
+  .mat-table-container {
+    position: relative;
+  }

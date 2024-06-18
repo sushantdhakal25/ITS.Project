@@ -48,12 +48,12 @@ CREATE TABLE Transfer (
 -- *********Inmate Procedures*************
 
 DELIMITER //
-CREATE PROCEDURE SpInmateSel(
+Create PROCEDURE SpInmateSel(
     IN SearchText VARCHAR(100)
 )
 BEGIN
 
-SELECT JSON_ARRAYAGG(JSON_OBJECT('InmateId', i.InmateId, 'Name', i.Name, 'IdentificationNumber', i.IdentificationNumber)) AS Json 
+SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT('inmateId', i.InmateId, 'name', i.Name, 'identificationNumber', i.IdentificationNumber, 'currentFacilityId', i.CurrentFacilityId, 'currentFacilityName', f.Name)),'[]') AS Json 
 FROM INMATE AS i
 INNER JOIN FACILITY AS f ON f.FacilityId = i.CurrentFacilityId 
 WHERE (i.Name LIKE CONCAT('%', SearchText, '%') OR i.IdentificationNumber = SearchText)
@@ -64,7 +64,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE SpInmatesDelete(IN param LONGTEXT, OUT result LONGTEXT)
+CREATE PROCEDURE SpInmateDelete(IN param LONGTEXT, OUT result LONGTEXT)
 BEGIN
     DROP TEMPORARY TABLE IF EXISTS TempInmates;
     CREATE TEMPORARY TABLE TempInmates (
@@ -104,7 +104,7 @@ DELIMITER ;
 
 
 DELIMITER //
-CREATE PROCEDURE SpInmatesUpdate(IN param LONGTEXT, OUT result LONGTEXT)
+CREATE PROCEDURE SpInmateUpdate(IN param LONGTEXT, OUT result LONGTEXT)
 BEGIN
     DROP TEMPORARY TABLE IF EXISTS TempInmates;
     CREATE TEMPORARY TABLE TempInmates (
@@ -150,10 +150,12 @@ BEGIN
             'inmateId', ti.InmateId,
             'identificationNumber', ti.IdentificationNumber,
             'name', ti.Name,
-            'currentFacilityId', ti.CurrentFacilityId
+            'currentFacilityId', ti.CurrentFacilityId,
+            'currentFacilityName', f.Name
         )
     ) AS 'Json' INTO result
-    FROM TempInmates ti;
+    FROM TempInmates ti
+    INNER JOIN Facility as f on f.FacilityId = ti.CurrentFacilityId;
 
 END //
 DELIMITER ;
@@ -222,7 +224,7 @@ BEGIN
             'identificationNumber', i.IdentificationNumber,
             'name', i.Name,
             'currentFacilityId', i.CurrentFacilityId,
-            'facilityName', f.Name
+            'currentFacilityName', f.Name
         )
     ) AS 'Json' INTO result
     FROM TempInmatesId ti
@@ -260,13 +262,14 @@ CREATE PROCEDURE SpOfficerSel(
 )
 BEGIN
 
-SELECT JSON_ARRAYAGG(JSON_OBJECT('officerId', i.OfficerId, 'name', i.Name, 'identificationNumber', i.IdentificationNumber)) AS Json 
+SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT('officerId', i.OfficerId, 'name', i.Name, 'identificationNumber', i.IdentificationNumber)),'[]') AS Json 
 FROM OFFICER AS i
 WHERE (i.Name LIKE CONCAT('%', SearchText, '%') OR i.IdentificationNumber = SearchText)
        OR SearchText IS NUll;
 	
 END; //
 DELIMITER ;
+
 
 
 
@@ -368,7 +371,7 @@ BEGIN
         SELECT JSON_UNQUOTE(JSON_EXTRACT(param, '$.officerId')),
         JSON_UNQUOTE(JSON_EXTRACT(param, '$.identificationNumber')),
         JSON_UNQUOTE(JSON_EXTRACT(param, '$.name')),
-        JSON_UNQUOTE(JSON_EXTRACT(param, '$.currentFacilityId'))
+        JSON_UNQUOTE(JSON_EXTRACT(param, '$.password'))
         WHERE EXISTS (
             SELECT 1 FROM Officer as o WHERE o.OfficerId = JSON_UNQUOTE(JSON_EXTRACT(param, '$.officerId'))
         );
@@ -445,7 +448,7 @@ CREATE PROCEDURE SpFacilitySel(
 IN SearchText VARCHAR(100)
 )
 BEGIN
-    SELECT JSON_ARRAYAGG(JSON_OBJECT('FacilityId', f.FacilityId, 'Name', f.Name, 'Address', f.Address, 'Email', f.Email, 'Phone', f.Phone)) AS Json
+    SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT('facilityId', f.FacilityId, 'name', f.Name, 'address', f.Address, 'email', f.Email, 'phone', f.Phone)),'[]') AS Json
     FROM Facility AS f 
     WHERE f.Name LIKE CONCAT('%', SearchText, '%') OR f.Address LIKE CONCAT(SearchText, '%') OR SearchText IS NULL;
 END //
@@ -557,16 +560,13 @@ BEGIN
     SELECT MAX(Id) INTO MaxId FROM TempFacilities;
 
     WHILE MinId <= MaxId DO
-        INSERT INTO Facility (FacilityId, Name, Address, Email, Phone)
-        SELECT 
-            tt.FacilityId,
-            tt.Name,
+        INSERT INTO Facility (Name, Address, Email, Phone)
+        SELECT tt.Name,
             tt.Address,
             tt.Email,
             tt.Phone
         FROM TempFacilities AS tt
-        LEFT JOIN Facility AS t ON t.FacilityId = tt.FacilityId
-        WHERE tt.id = MinId AND t.FacilityId IS NULL;
+        WHERE tt.id = MinId;
 
         INSERT INTO TempFacilityId (FacilityId)
         SELECT LAST_INSERT_ID();
@@ -576,11 +576,11 @@ BEGIN
 
     SELECT JSON_ARRAYAGG(
         JSON_OBJECT(
-            'facilityId', ti.FacilityId,
-            'name', ti.Name,
-            'address', ti.Address,
-            'email', ti.Email,
-            'phone', ti.Phone
+            'facilityId', tt.FacilityId,
+            'name', tt.Name,
+            'address', tt.Address,
+            'email', tt.Email,
+            'phone', tt.Phone
         )
     ) AS 'Json' INTO result
     FROM TempFacilityId as t
@@ -588,8 +588,6 @@ BEGIN
 
 END //
 DELIMITER ;
-
-
 
 
 
@@ -643,17 +641,17 @@ CREATE PROCEDURE SpTransferSel(
 IN searchText VARCHAR(100)
 )
 BEGIN
-    SELECT JSON_ARRAYAGG(JSON_OBJECT(
+    SELECT COALESCE(JSON_ARRAYAGG(JSON_OBJECT(
         'transferId', t.TransferId, 
         'inmateId', t.InmateId,
-        'inmateName', i.Name
+        'inmateName', i.Name,
         'sourceFacilityId', t.SourceFacilityId, 
         'sourceFacilityName', sf.Name,
         'destinationFacilityId', t.DestinationFacilityId, 
         'destinationFacilityName', df.Name,
         'departureTime', t.DepartureTime, 
         'arrivalTime', t.ArrivalTime
-    )) AS Json
+    )),'[]') AS Json
     FROM Transfer AS t
     INNER JOIN Inmate AS i ON i.InmateId = t.InmateId
     INNER JOIN Facility AS sf ON sf.FacilityId = t.SourceFacilityId
@@ -690,8 +688,8 @@ BEGIN
             JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.inmateId')) AS InmateId,
             JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.sourceFacilityId')) AS SourceFacilityId,
             JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.destinationFacilityId')) AS DestinationFacilityId,
-            JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.departureTime')) AS DepartureTime,
-            JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.arrivalTime')) AS ArrivalTime
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.departureTime')), '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s') as DepartureTime,
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(JSON_UNQUOTE(JSON_EXTRACT(jt.value, '$.arrivalTime')), '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s') as ArrivalTime
         FROM JSON_TABLE(param, '$[*]' COLUMNS (
             value JSON PATH '$'
         )) AS jt
@@ -703,8 +701,8 @@ BEGIN
             JSON_UNQUOTE(JSON_EXTRACT(param, '$.inmateId')),
             JSON_UNQUOTE(JSON_EXTRACT(param, '$.sourceFacilityId')),
             JSON_UNQUOTE(JSON_EXTRACT(param, '$.destinationFacilityId')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.departureTime')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.arrivalTime'))
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(JSON_UNQUOTE(JSON_EXTRACT(param, '$.departureTime')), '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s'),
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(JSON_UNQUOTE(JSON_EXTRACT(param, '$.arrivalTime')), '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s')
         WHERE EXISTS (
             SELECT 1 FROM Transfer as t WHERE t.TransferId = JSON_UNQUOTE(JSON_EXTRACT(param, '$.transferId'))
         );
@@ -723,6 +721,7 @@ BEGIN
         JSON_OBJECT(
             'transferId', t.TransferId,
             'inmateId', t.InmateId,
+            'inmateName', i.Name,
             'sourceFacilityId', t.SourceFacilityId,
             'destinationFacilityId', t.DestinationFacilityId,
             'departureTime', t.DepartureTime,
@@ -732,6 +731,7 @@ BEGIN
         )
     ) AS 'Json' INTO result
     FROM TempTransfers t
+    INNER JOIN Inmate i ON i.InmateId = t.InmateId
     INNER JOIN Facility sf ON sf.FacilityId = t.SourceFacilityId
     INNER JOIN Facility df ON df.FacilityId = t.DestinationFacilityId;
 
@@ -753,8 +753,8 @@ BEGIN
         InmateId INT NOT NULL,
         SourceFacilityId INT NOT NULL,
         DestinationFacilityId INT NOT NULL,
-        DepartureTime DATETIME NOT NULL,
-        ArrivalTime DATETIME NOT NULL
+        DepartureTime VARCHAR(25) NOT NULL,
+        ArrivalTime VARCHAR(25) NOT NULL
     );
 
     CREATE TEMPORARY TABLE TempTransfersId (
@@ -773,11 +773,11 @@ BEGIN
     ELSE
         INSERT INTO TempTransfers (InmateId, SourceFacilityId, DestinationFacilityId, DepartureTime, ArrivalTime)
         VALUES (
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.InmateId')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.SourceFacilityId')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.DestinationFacilityId')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.DepartureTime')),
-            JSON_UNQUOTE(JSON_EXTRACT(param, '$.ArrivalTime'))
+            JSON_UNQUOTE(JSON_EXTRACT(param, '$.inmateId')),
+            JSON_UNQUOTE(JSON_EXTRACT(param, '$.sourceFacilityId')),
+            JSON_UNQUOTE(JSON_EXTRACT(param, '$.destinationFacilityId')),
+            JSON_UNQUOTE(JSON_EXTRACT(param, '$.departureTime')),
+            JSON_UNQUOTE(JSON_EXTRACT(param, '$.arrivalTime'))
         );
     END IF;
 
@@ -790,11 +790,10 @@ BEGIN
             tt.InmateId,
             tt.SourceFacilityId,
             tt.DestinationFacilityId,
-            tt.DepartureTime,
-            tt.ArrivalTime
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(tt.DepartureTime, '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s'),
+            DATE_FORMAT(STR_TO_DATE(SUBSTRING_INDEX(tt.ArrivalTime, '.', 1), '%Y-%m-%dT%H:%i:%s'), '%Y-%m-%d %H:%i:%s')
         FROM TempTransfers AS tt
-        LEFT JOIN Transfer AS t ON t.TransferId = tt.TransferId
-        WHERE tt.id = MinId AND t.TransferId IS NULL;
+        WHERE tt.id = MinId;
 
         INSERT INTO TempTransfersId (TransferId)
         SELECT LAST_INSERT_ID();
@@ -806,6 +805,7 @@ BEGIN
         JSON_OBJECT(
             'transferId', t.TransferId,
             'inmateId', t.InmateId,
+            'inmateName', i.Name,
             'sourceFacilityId', t.SourceFacilityId,
             'destinationFacilityId', t.DestinationFacilityId,
             'departureTime', t.DepartureTime,
@@ -815,7 +815,8 @@ BEGIN
         )
     ) AS 'Json' INTO result
     FROM TempTransfersId tt
-    INNER JOIN Transfers t ON t.TransferId = tt.TransferId
+    INNER JOIN Transfer t ON t.TransferId = tt.TransferId
+    INNER JOIN Inmate i ON i.InmateId = t.InmateId
     INNER JOIN Facility sf ON sf.FacilityId = t.SourceFacilityId
     INNER JOIN Facility df ON df.FacilityId = t.DestinationFacilityId;
 
@@ -865,6 +866,7 @@ BEGIN
 
 END //
 DELIMITER ;
+
 
 
 

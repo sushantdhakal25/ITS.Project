@@ -50,9 +50,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"> accepts json object or array string</param>
         /// <returns>newly added officer list as json</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] string json)
+        public async Task<IActionResult> Add([FromBody] MvInsertDto json)
         {
-            var officers = await _officerService.AddOfficerAsync(json);
+            var officers = await _officerService.AddOfficerAsync(json.Json);
             return Ok(officers);
         }
 
@@ -62,10 +62,10 @@ namespace ITS.Api.Controllers
         /// <param name="json"> accepts json object or array string</param>
         /// <returns>modified officer list as json</returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] string json)
+        public async Task<IActionResult> Update([FromBody] MvInsertDto json)
         {
 
-            var officers = await _officerService.UpdateOfficerAsync(json);
+            var officers = await _officerService.UpdateOfficerAsync(json.Json);
             return Ok(officers);
         }
 
@@ -75,9 +75,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"> accepts json object or array string</param>
         /// <returns>deleted officer list as json</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] string json)
+        public async Task<IActionResult> Delete([FromBody] MvInsertDto json)
         {
-            var officers = await _officerService.DeleteOfficerAsync(json);
+            var officers = await _officerService.DeleteOfficerAsync(json.Json);
             return Ok(officers);
         }
 

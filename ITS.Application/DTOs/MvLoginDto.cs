@@ -1,8 +1,7 @@
 ﻿namespace ITS.Application.DTOs
 {
-    public class MvLoginDto
+    public class MvInsertDto
     {
-        public string IdentificationNumber { get; set; }
-        public string Password { get; set; }
+        public string Json { get; set; }
     }
 }

@@ -1,4 +1,5 @@
-﻿using ITS.Application.Interfaces;
+﻿using ITS.Application.DTOs;
+using ITS.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITS.Api.Controllers
@@ -32,9 +33,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns> list of transfer made</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] string json)
+        public async Task<IActionResult> Add([FromBody] MvInsertDto json)
         {
-            var transfers = await _transferService.AddTransferAsync(json);
+            var transfers = await _transferService.AddTransferAsync(json.Json);
             return Ok(transfers);
         }
 
@@ -44,9 +45,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] string json)
+        public async Task<IActionResult> Update([FromBody] MvInsertDto json)
         {
-            var transfers = await _transferService.UpdateTransferAsync(json);
+            var transfers = await _transferService.UpdateTransferAsync(json.Json);
             return Ok(transfers);
         }
 
@@ -56,9 +57,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns>Removed transfer information array as json</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] string json)
+        public async Task<IActionResult> Delete([FromBody] MvInsertDto json)
         {
-            var transfers = await _transferService.DeleteTransferAsync(json);
+            var transfers = await _transferService.DeleteTransferAsync(json.Json);
             return Ok(transfers);
         }
     }

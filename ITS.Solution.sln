@@ -15,6 +15,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ITS.Test", "ITS.Test\ITS.Te
 EndProject
 Project("{54A90642-561A-4BB1-A94E-469ADEE60C69}") = "ITS.Web", "ITS.Web\ITS.Web.esproj", "{CAB72C4F-F80C-405E-8F97-DE31273D4855}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ITS.Database", "ITS.Database", "{45CB9BFC-A535-4D60-8E47-D72B2CF53399}"
+	ProjectSection(SolutionItems) = preProject
+		ITS.Database\Database.sql = ITS.Database\Database.sql
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU

@@ -1,0 +1,26 @@
+/* confirm-dialog.component.scss */
+
+:host {
+    display: block;
+    min-width: 300px;
+}
+
+.mat-dialog-title {
+    color: #333;
+    font-weight: 500;
+    margin-bottom: 20px;
+}
+
+.mat-dialog-content {
+    font-size: 16px;
+    color: #555;
+}
+
+.mat-dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+}
+
+button {
+    margin-left: 10px;
+}

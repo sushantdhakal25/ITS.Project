@@ -1,0 +1,33 @@
+<div class="form-container">
+<h4>{{formType =='add' ? 'Add':'Update'}} Inmate</h4>
+<form #fm="ngForm" (ngSubmit)="onFormSubmit()" class="inmate-form">
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Name</mat-label>
+      <input matInput placeholder="Name" name="name" [(ngModel)]="formObject.name" required>
+    </mat-form-field>
+  </div>
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Identification Number</mat-label>
+      <input matInput placeholder="Identification Number" name="identificationNumber" [(ngModel)]="formObject.identificationNumber" required>
+    </mat-form-field>
+  </div>
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Current Facility</mat-label>
+      <mat-select name="currentFacilityId" [(ngModel)]="formObject.currentFacilityId" required>
+        <mat-option *ngFor="let facility of facilities" [value]="facility.facilityId">
+          {{ facility.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+  <div class="form-actions">
+    <button [disabled]="!fm.valid" type="submit" mat-flat-button color="primary">Save</button>
+    <button type="button" (click)="onReset(fm)" mat-flat-button color="warn">Reset</button>
+    <button [mat-dialog-close] mat-flat-button color="accent">Close</button>
+  </div>
+</form>
+</div>
+

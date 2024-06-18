@@ -1,0 +1,62 @@
+<mat-toolbar [ngClass]="'actionbar'" class="mat-elevation-z8">
+    <mat-form-field class="search-bar">
+      <input #input matInput [(ngModel)]="searchText" (keyup.enter)="search(searchText)" placeholder="Search">
+      <button mat-icon-button matSuffix (click)="search(input.value)"><mat-icon>search</mat-icon></button>
+    </mat-form-field>
+    <div class="spacer"></div>
+    <button mat-icon-button (click)="referesh()"><mat-icon>cached</mat-icon></button>
+    <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+    <mat-menu #menu="matMenu">
+      <a mat-menu-item (click)="onActionClick('edit')"><mat-icon>edit</mat-icon> Edit</a>
+      <a mat-menu-item (click)="onActionClick('delete')"><mat-icon>delete</mat-icon>Delete</a>
+    </mat-menu>
+  </mat-toolbar>
+  
+  
+  <div class="mat-elevation-z2">
+    <mat-table [dataSource]="dataSource" matSort>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="InmateName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Inmate Name</mat-header-cell>
+        <mat-cell *matCellDef="let transfer">{{ transfer.inmateName }}</mat-cell>
+      </ng-container>
+
+      <!-- Source Facility Column -->
+      <ng-container matColumnDef="SourceFacilityName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Source Facility</mat-header-cell>
+        <mat-cell *matCellDef="let transfer">{{ transfer.sourceFacilityName }}</mat-cell>
+      </ng-container>
+  
+      <!-- Destination Facility Column -->
+      <ng-container matColumnDef="DestinationFacilityName">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Destination Facility</mat-header-cell>
+        <mat-cell *matCellDef="let transfer">{{ transfer.destinationFacilityName }}</mat-cell>
+      </ng-container>
+  
+      <!-- Depature Time Facilty Column -->
+      <ng-container matColumnDef="DepartureTime">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Departure Time</mat-header-cell>
+        <mat-cell *matCellDef="let transfer">{{ transfer.departureTime }}</mat-cell>
+      </ng-container>
+
+      <!-- Arrival Time Facilty Column -->
+      <ng-container matColumnDef="ArrivalTime">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Arrival Time</mat-header-cell>
+        <mat-cell *matCellDef="let transfer">{{ transfer.arrivalTime }}</mat-cell>
+      </ng-container>
+  
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row [ngClass]="{'selected-row': selectedIndex == i}" *matRowDef="let row; columns: displayedColumns; let i=index;"
+          (click)="onRowClick(row, i)"></mat-row>
+    </mat-table>
+    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+    <mat-card *ngIf="noData" [ngClass]="'nodata'" class="mat-elevation-z8">
+      No Data To Display
+    </mat-card>
+  </div>
+  
+  
+  <button [ngClass]="'addbutton'" mat-mini-fab color="primary" (click)="onActionClick('add')">
+    <mat-icon>add</mat-icon>
+  </button>

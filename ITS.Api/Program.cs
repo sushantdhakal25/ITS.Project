@@ -46,6 +46,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(
 
 
 builder.Services.AddAutoMapper(typeof(OfficerDto).Assembly)
+    .AddAutoMapper(typeof(MvInsertDto).Assembly)
     .AddAutoMapper(typeof(MvLoginDto).Assembly);
 
 builder.Services.AddIdentityServer(options =>

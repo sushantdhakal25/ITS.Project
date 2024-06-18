@@ -1,0 +1,55 @@
+<mat-toolbar [ngClass]="'actionbar'" class="mat-elevation-z8">
+  <mat-form-field class="search-bar">
+    <input #input matInput [(ngModel)]="searchText" (keyup.enter)="search(searchText)" placeholder="Search">
+    <button mat-icon-button matSuffix (click)="search(input.value)"><mat-icon>search</mat-icon></button>
+  </mat-form-field>
+  <div class="spacer"></div>
+  <button mat-icon-button (click)="referesh()"><mat-icon>cached</mat-icon></button>
+  <button mat-icon-button [matMenuTriggerFor]="menu"><mat-icon>more_vert</mat-icon></button>
+  <mat-menu #menu="matMenu">
+    <a mat-menu-item (click)="onActionClick('edit')"><mat-icon>edit</mat-icon> Edit</a>
+    <a mat-menu-item (click)="onActionClick('delete')"><mat-icon>delete</mat-icon>Delete</a>
+  </mat-menu>
+</mat-toolbar>
+
+
+<div class="mat-elevation-z2">
+  <mat-table [dataSource]="dataSource" matSort>
+    <!-- InmateId Column -->
+    <ng-container matColumnDef="InmateId">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Inmate ID</mat-header-cell>
+      <mat-cell *matCellDef="let inmate">{{ inmate.inmateId }}</mat-cell>
+    </ng-container>
+
+    <!-- IdentificationNumber Column -->
+    <ng-container matColumnDef="IdentificationNumber">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Identification Number</mat-header-cell>
+      <mat-cell *matCellDef="let inmate">{{ inmate.identificationNumber }}</mat-cell>
+    </ng-container>
+
+    <!-- Name Column -->
+    <ng-container matColumnDef="Name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Name</mat-header-cell>
+      <mat-cell *matCellDef="let inmate">{{ inmate.name }}</mat-cell>
+    </ng-container>
+
+    <!-- Current Facilty Column -->
+    <ng-container matColumnDef="CurrentFacilityName">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Current Facility</mat-header-cell>
+      <mat-cell *matCellDef="let inmate">{{ inmate.currentFacilityName }}</mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <mat-row [ngClass]="{'selected-row': selectedIndex == i}" *matRowDef="let row; columns: displayedColumns; let i=index;"
+        (click)="onRowClick(row, i)"></mat-row>
+  </mat-table>
+  <mat-paginator #paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
+  <mat-card *ngIf="noData" [ngClass]="'nodata'" class="mat-elevation-z8">
+    No Data To Display
+  </mat-card>
+</div>
+
+
+<button [ngClass]="'addbutton'" mat-mini-fab color="primary" (click)="onActionClick('add')">
+  <mat-icon>add</mat-icon>
+</button>

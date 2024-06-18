@@ -1,0 +1,65 @@
+<div class="form-container">
+<h4>{{formType =='add' ? 'Add':'Update'}} Transfer</h4>
+<form #fm="ngForm" (ngSubmit)="onFormSubmit()" class="transfer-form">
+
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Inmate</mat-label>
+      <mat-select name="inmateId" [(ngModel)]="formObject.inmateId" required>
+        <mat-option *ngFor="let inmate of inmates" [value]="inmate.inmateId">
+          {{ inmate.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Source Facility</mat-label>
+      <mat-select name="sourceFacilityId" [(ngModel)]="formObject.sourceFacilityId" required>
+        <mat-option *ngFor="let facility of facilities" [value]="facility.facilityId">
+          {{ facility.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Destination Facility</mat-label>
+      <mat-select name="destinationFacilityId" [(ngModel)]="formObject.destinationFacilityId" required>
+        <mat-option *ngFor="let facility of facilities" [value]="facility.facilityId">
+          {{ facility.name }}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+  </div>
+
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Departure Time</mat-label>
+      <input matInput [matDatepicker]="departurePicker" placeholder="Departure Time"
+             name="departureTime" [(ngModel)]="formObject.departureTime" required>
+      <mat-datepicker-toggle matSuffix [for]="departurePicker"></mat-datepicker-toggle>
+      <mat-datepicker #departurePicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+
+  <div class="form-field">
+    <mat-form-field appearance="fill">
+      <mat-label>Arrival Time</mat-label>
+      <input matInput [matDatepicker]="arrivalPicker" placeholder="Arrival Time"
+             name="arrivalTime" [(ngModel)]="formObject.arrivalTime" required>
+      <mat-datepicker-toggle matSuffix [for]="arrivalPicker"></mat-datepicker-toggle>
+      <mat-datepicker #arrivalPicker></mat-datepicker>
+    </mat-form-field>
+  </div>
+  
+  <div class="form-actions">
+    <button [disabled]="!fm.valid" type="submit" mat-flat-button color="primary">Save</button>
+    <button type="button" (click)="onReset(fm)" mat-flat-button color="warn">Reset</button>
+    <button [mat-dialog-close] mat-flat-button color="accent">Close</button>
+  </div>
+</form>
+</div>
+

@@ -1,4 +1,5 @@
-﻿using ITS.Application.Interfaces;
+﻿using ITS.Application.DTOs;
+using ITS.Application.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ITS.Api.Controllers
@@ -32,9 +33,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns>latest inserted facilities list as json</returns>
         [HttpPost]
-        public async Task<IActionResult> Add([FromBody] string json)
+        public async Task<IActionResult> Add([FromBody] MvInsertDto json)
         {
-            var Facilitys = await _facilityService.AddFacilityAsync(json);
+            var Facilitys = await _facilityService.AddFacilityAsync(json.Json);
             return Ok(Facilitys);
         }
 
@@ -44,10 +45,10 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns>modified facility list as json</returns>
         [HttpPut]
-        public async Task<IActionResult> Update([FromBody] string json)
+        public async Task<IActionResult> Update([FromBody] MvInsertDto json)
         {
 
-            var Facilitys = await _facilityService.UpdateFacilityAsync(json);
+            var Facilitys = await _facilityService.UpdateFacilityAsync(json.Json);
             return Ok(Facilitys);
         }
 
@@ -57,9 +58,9 @@ namespace ITS.Api.Controllers
         /// <param name="json"></param>
         /// <returns>deleted facility list as json</returns>
         [HttpDelete]
-        public async Task<IActionResult> Delete([FromBody] string json)
+        public async Task<IActionResult> Delete([FromBody] MvInsertDto json)
         {
-            var Facilitys = await _facilityService.DeleteFacilityAsync(json);
+            var Facilitys = await _facilityService.DeleteFacilityAsync(json.Json);
             return Ok(Facilitys);
         }
     }
